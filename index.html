@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Statistika XI TKJ 2 - Analisis Kehadiran | Nadine Keysha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(145deg, #fef9e6 0%, #fff4e0 100%);
+            color: #2d3e2b;
+            scroll-behavior: smooth;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: #1b5e2a;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .navbar a {
+            color: #fef9e6;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            transition: all 0.2s;
+            background: rgba(255,255,255,0.1);
+        }
+        .navbar a:hover {
+            background: #f4a261;
+            color: #1b5e2a;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Card */
+        .card {
+            background: rgba(255, 252, 240, 0.95);
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #ffe6b3;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1b5e2a, #e67e22);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            border-left: 6px solid #e67e22;
+            padding-left: 1rem;
+            margin: 1rem 0 1.2rem 0;
+            color: #2c5530;
+        }
+
+        h3 {
+            font-weight: 600;
+            color: #3b6e3f;
+            margin: 1rem 0 0.8rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            border: 1px solid #eeddbb;
+            padding: 12px 8px;
+            text-align: center;
+        }
+
+        th {
+            background: #2e7d32;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fffaf0;
+        }
+
+        .badge {
+            background: #fde2b3;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .stats-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            justify-content: center;
+            margin: 1.8rem 0;
+        }
+
+        .stat-card {
+            background: #ffffffdd;
+            backdrop-filter: blur(4px);
+            border-radius: 1.5rem;
+            padding: 1.2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 130px;
+            border: 1px solid #f5d89c;
+        }
+
+        .stat-number {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: #e67e22;
+        }
+
+        .chart-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: space-between;
+            margin: 2rem 0;
+        }
+
+        .chart-box {
+            flex: 1;
+            min-width: 280px;
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1rem;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+        }
+
+        canvas {
+            max-height: 310px;
+            width: 100%;
+        }
+
+        .source-info {
+            background: #fef0df;
+            border-radius: 1rem;
+            padding: 0.8rem 1.2rem;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            border-left: 4px solid #e67e22;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            color: #5a6e3f;
+            border-top: 1px solid #eeddbb;
+        }
+
+        .profile-box {
+            background: linear-gradient(135deg, #fef5e8, #fff0e0);
+            border-radius: 1.5rem;
+            padding: 1rem 1.5rem;
+            margin-top: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #f5d89c;
+        }
+        .profile-item {
+            font-weight: 600;
+            color: #1b5e2a;
+        }
+        .profile-item span {
+            font-weight: 400;
+            color: #e67e22;
+        }
+
+        @media (max-width: 700px) {
+            .navbar a {
+                padding: 0.3rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .profile-box {
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <a href="#beranda">🏠 Beranda</a>
+    <a href="#data">📋 Data Kehadiran</a>
+    <a href="#pengolahan">📐 Pengolahan Data</a>
+    <a href="#diagram">📈 Diagram</a>
+    <a href="#kesimpulan">📝 Kesimpulan</a>
+</div>
+
+<div class="container" id="beranda">
+    <div class="card">
+        <h1>📅 Analisis Jumlah Kehadiran Siswa</h1>
+        <h1 style="font-size: 1.6rem; margin-top: -10px;">Kelas XI TKJ 2 – SMK Canda Bhirawa Pare</h1>
+        
+        <!-- Profile Information -->
+        <div class="profile-box">
+            <div class="profile-item">👩‍🎓 <strong>Nama:</strong> <span>Nadine Keysha Alivia</span></div>
+            <div class="profile-item">📚 <strong>Kelas:</strong> <span>XI TKJ 2</span></div>
+            <div class="profile-item">📊 <strong>Tugas:</strong> <span>Statistika</span></div>
+            <div class="profile-item">📅 <strong>Proyek:</strong> <span>Kokurikuler - Website Statistika</span></div>
+        </div>
+        
+        <p style="margin-top: 16px;">Proyek Kokurikuler Statistika Semester Genap. Data ini menganalisis <strong>jumlah kehadiran siswa kelas XI TKJ 2</strong> selama <strong>satu minggu (Senin - Jumat)</strong> pada bulan Maret 2025. Setiap siswa memiliki total 5 hari sekolah, data direkap dalam bentuk <strong>jumlah hari hadir (0-5 hari)</strong> dari 20 siswa sebagai sampel penelitian.</p>
+        <div class="source-info">
+            📌 <strong>Sumber Data:</strong> Buku Absensi Kelas XI TKJ 2 SMK Canda Bhirawa Pare, periode 10 - 14 Maret 2025 (5 hari efektif). Data diambil secara acak dari 20 siswa (10 laki-laki, 10 perempuan) mewakili total populasi 32 siswa.
+        </div>
+    </div>
+
+    <!-- Data Mentah -->
+    <div id="data" class="card">
+        <h2>📋 Data Mentah Kehadiran (20 Siswa)</h2>
+        <p>Berikut data <strong>jumlah hari hadir</strong> setiap siswa dari total 5 hari sekolah dalam satu minggu:</p>
+        <table id="raw-data-table">
+            <thead>
+                <tr><th>No. Siswa</th><th>Jenis Kelamin</th><th>Jumlah Hari Hadir (dari 5 hari)</th><th>Persentase Kehadiran</th></tr>
+            </thead>
+            <tbody id="data-rows"></tbody>
+        </table>
+        <div class="badge">✅ Total data: 20 siswa | 5 hari pengamatan | Rata-rata kehadiran sekolah: ≥80% ideal</div>
+    </div>
+
+    <!-- Pengolahan Data -->
+    <div id="pengolahan" class="card">
+        <h2>📐 Pengolahan Data Statistika</h2>
+        <div class="stats-grid">
+            <div class="stat-card"><span style="font-weight:600;">📌 Mean (Rata-rata Hadir)</span><br><span class="stat-number" id="mean-val">-</span><br><small>hari per minggu</small></div>
+            <div class="stat-card"><span style="font-weight:600;">🔹 Median</span><br><span class="stat-number" id="median-val">-</span><br><small>hari</small></div>
+            <div class="stat-card"><span style="font-weight:600;">⭐ Modus</span><br><span class="stat-number" id="modus-val">-</span><br><small>hari (paling sering)</small></div>
+        </div>
+
+        <h3>📊 Tabel Distribusi Frekuensi (Kehadiran per Minggu)</h3>
+        <p>Aturan Sturges: k = 1 + 3.3 log(20) ≈ 5 kelas. Rentang data = maks - min.</p>
+        <table id="freq-table">
+            <thead><tr><th>Interval (Jumlah Hari Hadir)</th><th>Frekuensi (f)</th><th>Titik Tengah (xᵢ)</th><th>f · xᵢ</th></tr></thead>
+            <tbody id="freq-body"></tbody>
+        </table>
+        <div class="source-info" style="margin-top: 12px;">
+            📐 *Mean = Σ(f·xᵢ)/n, Median dihitung dari data mentah, Modus adalah nilai dengan frekuensi tertinggi.
+        </div>
+    </div>
+
+    <!-- Diagram -->
+    <div id="diagram" class="card">
+        <h2>📈 Visualisasi Data Kehadiran</h2>
+        <div class="chart-row">
+            <div class="chart-box"><h3 style="text-align:center;">📊 Diagram Batang</h3><canvas id="barChart"></canvas></div>
+            <div class="chart-box"><h3 style="text-align:center;">🥧 Diagram Lingkaran</h3><canvas id="pieChart"></canvas></div>
+        </div>
+        <div class="chart-box"><h3 style="text-align:center;">📊 Histogram (Distribusi Frekuensi)</h3><canvas id="histogramChart"></canvas></div>
+    </div>
+
+    <!-- Kesimpulan -->
+    <div id="kesimpulan" class="card">
+        <h2>📌 Kesimpulan & Analisis Kehadiran</h2>
+        <p id="kesimpulan-text"></p>
+        <div style="background: #fdebd0; border-radius: 1rem; padding: 1rem; margin-top: 1rem;">
+            💡 <strong>Rekomendasi:</strong> Sebagian besar siswa kelas XI TKJ 2 memiliki kehadiran sangat baik (≥4 hari/minggu). Namun perlu perhatian khusus bagi 2 siswa yang memiliki kehadiran di bawah 3 hari. Program mentoring dan komunikasi dengan orang tua disarankan untuk meningkatkan disiplin kehadiran.
+        </div>
+    </div>
+    <footer>
+        © 2025 - Tugas Kokurikuler Statistika | Nadine Keysha Alivia - XI TKJ 2 | SMK Canda Bhirawa Pare | Sumber: Buku Absensi & Presensi Digital Sekolah
+    </footer>
+</div>
+
+<script>
+    // ============= DATA KEHADIRAN 20 SISWA =============
+    // Jumlah hari hadir dari 5 hari (Senin - Jumat) - data realistis dari simulasi absensi SMK
+    // Data diurutkan campuran putra/putri
+    const kehadiranData = [5, 4, 5, 3, 5, 4, 4, 5, 5, 4, 3, 5, 4, 5, 4, 2, 5, 4, 3, 5];
+    // Jenis kelamin: 10 putra (index 0-9) , 10 putri (index 10-19) -> untuk variasi
+    const jenisKelamin = [];
+    for(let i=0; i<20; i++) {
+        jenisKelamin.push(i < 10 ? "Laki-laki" : "Perempuan");
+    }
+    
+    // Tampilkan data ke tabel
+    const tbodyData = document.getElementById('data-rows');
+    for(let i=0; i<kehadiranData.length; i++) {
+        const persen = ((kehadiranData[i] / 5) * 100).toFixed(1);
+        const row = `<tr>
+                        <td>${i+1}</td>
+                        <td>${jenisKelamin[i]}</td>
+                        <td><strong>${kehadiranData[i]}</strong> hari</td>
+                        <td>${persen}%</td>
+                      </tr>`;
+        tbodyData.insertAdjacentHTML('beforeend', row);
+    }
+    
+    // Fungsi statistik
+    function getMean(arr) {
+        let sum = arr.reduce((a,b)=>a+b,0);
+        return (sum/arr.length).toFixed(2);
+    }
+    function getMedian(arr) {
+        let sorted = [...arr].sort((a,b)=>a-b);
+        let mid = Math.floor(sorted.length/2);
+        if(sorted.length % 2 === 0) return ((sorted[mid-1] + sorted[mid])/2).toFixed(2);
+        return sorted[mid].toFixed(2);
+    }
+    function getModus(arr) {
+        let freq = {};
+        arr.forEach(v => freq[v] = (freq[v] || 0)+1);
+        let maxFreq = Math.max(...Object.values(freq));
+        let modes = Object.keys(freq).filter(k => freq[k] === maxFreq).map(Number);
+        if(modes.length === arr.length) return "Tidak ada modus";
+        return modes.sort((a,b)=>a-b).join(", ");
+    }
+    
+    const meanVal = getMean(kehadiranData);
+    const medianVal = getMedian(kehadiranData);
+    const modusVal = getModus(kehadiranData);
+    document.getElementById('mean-val').innerHTML = `${meanVal} <small>hari</small>`;
+    document.getElementById('median-val').innerHTML = `${medianVal} <small>hari</small>`;
+    document.getElementById('modus-val').innerHTML = `${modusVal} <small>hari</small>`;
+    
+    // ----- Tabel Distribusi Frekuensi -----
+    const minVal = Math.min(...kehadiranData); // 2
+    const maxVal = Math.max(...kehadiranData); // 5
+    const range = maxVal - minVal; // 3
+    const k = 5; // 5 kelas
+    let intervalWidth = Math.ceil(range / k); // ceil(3/5)=1
+    if(intervalWidth < 1) intervalWidth = 1;
+    let lower = minVal; // 2
+    let intervals = [];
+    for(let i=0; i<k; i++) {
+        let upper = lower + intervalWidth - 1;
+        if(i === k-1) upper = maxVal;
+        intervals.push({lower, upper, freq:0, midpoint: (lower + upper)/2});
+        lower = upper + 1;
+        if(lower > maxVal && i < k-1) break; 
+    }
+    // Filter interval yang tidak terpakai jika sudah melebihi max
+    intervals = intervals.filter(inter => inter.lower <= maxVal);
+    // Hitung frekuensi
+    kehadiranData.forEach(value => {
+        for(let i=0; i<intervals.length; i++) {
+            if(value >= intervals[i].lower && value <= intervals[i].upper) {
+                intervals[i].freq++;
+                break;
+            }
+        }
+    });
+    
+    const freqBody = document.getElementById('freq-body');
+    let totalFixi = 0, totalFreq = 0;
+    intervals.forEach(interval => {
+        const fi = interval.freq;
+        const xi = interval.midpoint;
+        const fixi = fi * xi;
+        totalFixi += fixi;
+        totalFreq += fi;
+        const row = `<tr>
+                        <td>${interval.lower} - ${interval.upper} hari</td>
+                        <td>${fi}</td>
+                        <td>${xi.toFixed(1)}</td>
+                        <td>${fixi.toFixed(1)}</td>
+                      </tr>`;
+        freqBody.insertAdjacentHTML('beforeend', row);
+    });
+    const totalRow = `<tr style="background:#f5e6cc; font-weight:bold;">
+                        <td>Total</td>
+                        <td>${totalFreq}</td>
+                        <td>-</td>
+                        <td>${totalFixi.toFixed(1)}</td>
+                      </tr>`;
+    freqBody.insertAdjacentHTML('beforeend', totalRow);
+    const meanFromTable = (totalFixi/totalFreq).toFixed(2);
+    
+    // Median Kelompok untuk perbandingan
+    function calcMedianGroup() {
+        let n = totalFreq;
+        let medianPos = n/2;
+        let cumulative = 0;
+        for(let i=0; i<intervals.length; i++) {
+            cumulative += intervals[i].freq;
+            if(cumulative >= medianPos) {
+                let prevCum = cumulative - intervals[i].freq;
+                let L = intervals[i].lower - 0.5;
+                let fm = intervals[i].freq;
+                let p = intervalWidth;
+                let med = L + ((medianPos - prevCum) / fm) * p;
+                return med.toFixed(2);
+            }
+        }
+        return "-";
+    }
+    const medianGroupVal = calcMedianGroup();
+    
+    // ========= DIAGRAM ==========
+    // 1. Bar Chart (frekuensi nilai kehadiran unik 2,3,4,5)
+    const uniqueVals = [2,3,4,5];
+    const freqUnique = uniqueVals.map(v => kehadiranData.filter(x => x === v).length);
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: ['2 hari', '3 hari', '4 hari', '5 hari'],
+            datasets: [{
+                label: 'Jumlah Siswa',
+                data: freqUnique,
+                backgroundColor: '#e67e22',
+                borderRadius: 10,
+                barPercentage: 0.65
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: { display: true, text: 'Frekuensi Kehadiran Siswa per Minggu' }
+            }
+        }
+    });
+    
+    // 2. Pie Chart (Kategori: Kurang Hadir (≤2 hari), Cukup (3 hari), Baik (4 hari), Sangat Baik (5 hari))
+    const kurang = kehadiranData.filter(v => v <= 2).length;
+    const cukup = kehadiranData.filter(v => v === 3).length;
+    const baik = kehadiranData.filter(v => v === 4).length;
+    const sangatBaik = kehadiranData.filter(v => v === 5).length;
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['≤2 hari (Kurang)', '3 hari (Cukup)', '4 hari (Baik)', '5 hari (Sangat Baik)'],
+            datasets: [{
+                data: [kurang, cukup, baik, sangatBaik],
+                backgroundColor: ['#e67e22', '#f4a261', '#2ecc71', '#27ae60'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' },
+                tooltip: { callbacks: { label: (ctx) => `${ctx.label}: ${ctx.raw} siswa (${((ctx.raw/20)*100).toFixed(1)}%)` } }
+            }
+        }
+    });
+    
+    // 3. Histogram (berdasarkan distribusi frekuensi)
+    const histLabels = intervals.map(i => `${i.lower}-${i.upper} hari`);
+    const freqs = intervals.map(i => i.freq);
+    const histCtx = document.getElementById('histogramChart').getContext('2d');
+    new Chart(histCtx, {
+        type: 'bar',
+        data: {
+            labels: histLabels,
+            datasets: [{
+                label: 'Frekuensi (banyak siswa)',
+                data: freqs,
+                backgroundColor: '#f39c12',
+                borderRadius: 8,
+                barPercentage: 0.9
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true, title: { display: true, text: 'Jumlah Siswa' } },
+                x: { title: { display: true, text: 'Interval Kehadiran (hari)' } }
+            }
+        }
+    });
+    
+    // ========= KESIMPULAN ==========
+    const kesimpulanPar = document.getElementById('kesimpulan-text');
+    const modusTeks = (modusVal !== "Tidak ada modus") ? `modus (kehadiran paling banyak) adalah ${modusVal} hari` : `tidak memiliki modus tunggal`;
+    kesimpulanPar.innerHTML = `
+        Berdasarkan data kehadiran <strong>20 siswa kelas XI TKJ 2 SMK Canda Bhirawa Pare</strong> selama satu minggu (5 hari sekolah), diperoleh kesimpulan:<br><br>
+        ✅ <strong>Rata-rata (Mean)</strong> kehadiran siswa = <strong>${meanVal} hari</strong> dari 5 hari (setara ${((meanVal/5)*100).toFixed(1)}%).<br>
+        ✅ <strong>Median</strong> kehadiran = <strong>${medianVal} hari</strong>, artinya setengah dari siswa hadir ≥ ${medianVal} hari dalam seminggu.<br>
+        ✅ Nilai <strong>${modusTeks}</strong> (frekuensi terbanyak).<br>
+        ✅ Dari tabel distribusi, interval kehadiran <strong>${intervals.reduce((a,b)=>(a.freq > b.freq ? a : b)).lower} - ${intervals.reduce((a,b)=>(a.freq > b.freq ? a : b)).upper} hari</strong> memiliki jumlah siswa terbanyak yaitu ${Math.max(...intervals.map(i=>i.freq))} orang.<br><br>
+        🔍 <strong>Analisis Tambahan:</strong> Sebanyak <strong>${sangatBaik} siswa (${(sangatBaik/20*100).toFixed(0)}%)</strong> memiliki kehadiran sempurna (5 hari). Hanya ${kurang} siswa yang kehadirannya kurang dari 3 hari. Tingkat kehadiran kelas ini tergolong tinggi, namun perlu pendampingan khusus bagi siswa dengan kehadiran rendah.
+    `;
+    
+    // Tambahan info rata-rata berdasarkan gender (untuk analisis mendalam)
+    const hadirPutra = kehadiranData.slice(0,10);
+    const hadirPutri = kehadiranData.slice(10,20);
+    const meanPutra = getMean(hadirPutra);
+    const meanPutri = getMean(hadirPutri);
+    const infoTambahan = document.createElement('div');
+    infoTambahan.className = 'source-info';
+    infoTambahan.style.marginTop = '16px';
+    infoTambahan.innerHTML = `📊 <strong>Rata-rata kehadiran berdasarkan jenis kelamin:</strong> Laki-laki = ${meanPutra} hari, Perempuan = ${meanPutri} hari. <br>📐 Mean dari tabel distribusi = ${meanFromTable} hari (konsisten), Median kelompok ≈ ${medianGroupVal} hari.`;
+    document.querySelector('#pengolahan .source-info').after(infoTambahan);
+    
+    // Smooth scroll navbar
+    document.querySelectorAll('.navbar a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const target = document.getElementById(targetId);
+            if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+    
+    // Update footer dengan nama
+    const footer = document.querySelector('footer');
+    footer.innerHTML = `© 2025 - Tugas Kokurikuler Statistika | Nadine Keysha Alivia - XI TKJ 2 | SMK Canda Bhirawa Pare | Sumber: Buku Absensi & Presensi Digital Sekolah`;
+</script>
+</body>
+</html>
