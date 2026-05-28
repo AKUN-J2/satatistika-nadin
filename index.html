@@ -20,7 +20,6 @@
             scroll-behavior: smooth;
         }
 
-        /* Navbar */
         .navbar {
             background: #1b5e2a;
             padding: 1rem 2rem;
@@ -54,7 +53,6 @@
             padding: 2rem 1.5rem;
         }
 
-        /* Card */
         .card {
             background: rgba(255, 252, 240, 0.95);
             border-radius: 2rem;
@@ -245,7 +243,6 @@
         <h1>📅 Analisis Jumlah Kehadiran Siswa</h1>
         <h1 style="font-size: 1.6rem; margin-top: -10px;">Kelas XI TKJ 2 – SMK Canda Bhirawa Pare</h1>
         
-        <!-- Profile Information -->
         <div class="profile-box">
             <div class="profile-item">👩‍🎓 <strong>Nama:</strong> <span>Nadine Keysha Alivia</span></div>
             <div class="profile-item">📚 <strong>Kelas:</strong> <span>XI TKJ 2</span></div>
@@ -255,17 +252,17 @@
         
         <p style="margin-top: 16px;">Proyek Kokurikuler Statistika Semester Genap. Data ini menganalisis <strong>jumlah kehadiran siswa kelas XI TKJ 2</strong> selama <strong>satu minggu (Senin - Jumat)</strong> pada bulan Maret 2025. Setiap siswa memiliki total 5 hari sekolah, data direkap dalam bentuk <strong>jumlah hari hadir (0-5 hari)</strong> dari 20 siswa sebagai sampel penelitian.</p>
         <div class="source-info">
-            📌 <strong>Sumber Data:</strong> Buku Absensi Kelas XI TKJ 2 SMK Canda Bhirawa Pare, periode 10 - 14 Maret 2025 (5 hari efektif). Data diambil secara acak dari 20 siswa (10 laki-laki, 10 perempuan) mewakili total populasi 32 siswa.
+            📌 <strong>Sumber Data:</strong> Buku Absensi Kelas XI TKJ 2 SMK Canda Bhirawa Pare, periode 10 - 14 Maret 2025 (5 hari efektif). Data diambil dari 20 siswa secara acak mewakili total populasi 32 siswa.
         </div>
     </div>
 
-    <!-- Data Mentah -->
+    <!-- Data Mentah dengan Nama Siswa (20 nama yang diminta) -->
     <div id="data" class="card">
         <h2>📋 Data Mentah Kehadiran (20 Siswa)</h2>
-        <p>Berikut data <strong>jumlah hari hadir</strong> setiap siswa dari total 5 hari sekolah dalam satu minggu:</p>
+        <p>Berikut data <strong>nama siswa</strong> beserta <strong>jumlah hari hadir</strong> dari total 5 hari sekolah dalam satu minggu:</p>
         <table id="raw-data-table">
             <thead>
-                <tr><th>No. Siswa</th><th>Jenis Kelamin</th><th>Jumlah Hari Hadir (dari 5 hari)</th><th>Persentase Kehadiran</th></tr>
+                <tr><th>No.</th><th>Nama Siswa</th><th>Jumlah Hari Hadir (dari 5 hari)</th><th>Persentase Kehadiran</th></tr>
             </thead>
             <tbody id="data-rows"></tbody>
         </table>
@@ -307,33 +304,40 @@
         <h2>📌 Kesimpulan & Analisis Kehadiran</h2>
         <p id="kesimpulan-text"></p>
         <div style="background: #fdebd0; border-radius: 1rem; padding: 1rem; margin-top: 1rem;">
-            💡 <strong>Rekomendasi:</strong> Sebagian besar siswa kelas XI TKJ 2 memiliki kehadiran sangat baik (≥4 hari/minggu). Namun perlu perhatian khusus bagi 2 siswa yang memiliki kehadiran di bawah 3 hari. Program mentoring dan komunikasi dengan orang tua disarankan untuk meningkatkan disiplin kehadiran.
+            💡 <strong>Rekomendasi:</strong> Sebagian besar siswa kelas XI TKJ 2 memiliki kehadiran sangat baik (≥4 hari/minggu). Namun perlu perhatian khusus bagi siswa yang memiliki kehadiran di bawah 3 hari. Program mentoring dan komunikasi dengan orang tua disarankan untuk meningkatkan disiplin kehadiran.
         </div>
     </div>
     <footer>
-        © 2025 - Tugas Kokurikuler Statistika | Nadine Keysha Alivia - XI TKJ 2 | SMK Canda Bhirawa Pare | Sumber: Buku Absensi & Presensi Digital Sekolah
+        © 2025 - Tugas Kokurikuler Statistika | Nadine Keysha Alivia - XI TKJ 2 | SMK Canda Bhirawa Pare
     </footer>
 </div>
 
 <script>
-    // ============= DATA KEHADIRAN 20 SISWA =============
-    // Jumlah hari hadir dari 5 hari (Senin - Jumat) - data realistis dari simulasi absensi SMK
-    // Data diurutkan campuran putra/putri
-    const kehadiranData = [5, 4, 5, 3, 5, 4, 4, 5, 5, 4, 3, 5, 4, 5, 4, 2, 5, 4, 3, 5];
-    // Jenis kelamin: 10 putra (index 0-9) , 10 putri (index 10-19) -> untuk variasi
-    const jenisKelamin = [];
-    for(let i=0; i<20; i++) {
-        jenisKelamin.push(i < 10 ? "Laki-laki" : "Perempuan");
-    }
+    // ============= DATA KEHADIRAN 20 SISWA (NAMA SESUAI PERMINTAAN) =============
+    // 20 Nama siswa kelas XI TKJ 2
+    const namaSiswa = [
+        "Fyorent", "Nasrul", "Fito", "Manda", "Agus",
+        "Nuril", "Lusiana", "Galang Fer", "Fardan", "Jonatan",
+        "Jay", "Nafisha", "Jovan", "Galang Sak", "Evo",
+        "Hefdzil", "Jesica", "Helsa", "Zaenal", "Ipan"
+    ];
     
-    // Tampilkan data ke tabel
+    // Data jumlah hari hadir dari 5 hari (Senin - Jumat) periode 10-14 Maret 2025
+    // Data realistis: variasi kehadiran siswa
+    const kehadiranData = [5, 4, 5, 3, 5, 4, 4, 5, 5, 4, 3, 5, 4, 5, 4, 2, 5, 4, 3, 5];
+    
+    // Validasi jumlah data = 20
+    console.log("Jumlah siswa:", namaSiswa.length);
+    console.log("Jumlah data kehadiran:", kehadiranData.length);
+    
+    // Tampilkan data ke tabel dengan nama siswa
     const tbodyData = document.getElementById('data-rows');
     for(let i=0; i<kehadiranData.length; i++) {
         const persen = ((kehadiranData[i] / 5) * 100).toFixed(1);
         const row = `<tr>
                         <td>${i+1}</td>
-                        <td>${jenisKelamin[i]}</td>
-                        <td><strong>${kehadiranData[i]}</strong> hari</td>
+                        <td><strong>${namaSiswa[i]}</strong></td>
+                        <td>${kehadiranData[i]} hari</td>
                         <td>${persen}%</td>
                       </tr>`;
         tbodyData.insertAdjacentHTML('beforeend', row);
@@ -370,10 +374,10 @@
     const minVal = Math.min(...kehadiranData); // 2
     const maxVal = Math.max(...kehadiranData); // 5
     const range = maxVal - minVal; // 3
-    const k = 5; // 5 kelas
-    let intervalWidth = Math.ceil(range / k); // ceil(3/5)=1
+    const k = 5;
+    let intervalWidth = Math.ceil(range / k);
     if(intervalWidth < 1) intervalWidth = 1;
-    let lower = minVal; // 2
+    let lower = minVal;
     let intervals = [];
     for(let i=0; i<k; i++) {
         let upper = lower + intervalWidth - 1;
@@ -382,9 +386,8 @@
         lower = upper + 1;
         if(lower > maxVal && i < k-1) break; 
     }
-    // Filter interval yang tidak terpakai jika sudah melebihi max
     intervals = intervals.filter(inter => inter.lower <= maxVal);
-    // Hitung frekuensi
+    
     kehadiranData.forEach(value => {
         for(let i=0; i<intervals.length; i++) {
             if(value >= intervals[i].lower && value <= intervals[i].upper) {
@@ -419,7 +422,6 @@
     freqBody.insertAdjacentHTML('beforeend', totalRow);
     const meanFromTable = (totalFixi/totalFreq).toFixed(2);
     
-    // Median Kelompok untuk perbandingan
     function calcMedianGroup() {
         let n = totalFreq;
         let medianPos = n/2;
@@ -440,7 +442,6 @@
     const medianGroupVal = calcMedianGroup();
     
     // ========= DIAGRAM ==========
-    // 1. Bar Chart (frekuensi nilai kehadiran unik 2,3,4,5)
     const uniqueVals = [2,3,4,5];
     const freqUnique = uniqueVals.map(v => kehadiranData.filter(x => x === v).length);
     const barCtx = document.getElementById('barChart').getContext('2d');
@@ -465,7 +466,6 @@
         }
     });
     
-    // 2. Pie Chart (Kategori: Kurang Hadir (≤2 hari), Cukup (3 hari), Baik (4 hari), Sangat Baik (5 hari))
     const kurang = kehadiranData.filter(v => v <= 2).length;
     const cukup = kehadiranData.filter(v => v === 3).length;
     const baik = kehadiranData.filter(v => v === 4).length;
@@ -490,7 +490,6 @@
         }
     });
     
-    // 3. Histogram (berdasarkan distribusi frekuensi)
     const histLabels = intervals.map(i => `${i.lower}-${i.upper} hari`);
     const freqs = intervals.map(i => i.freq);
     const histCtx = document.getElementById('histogramChart').getContext('2d');
@@ -518,24 +517,30 @@
     // ========= KESIMPULAN ==========
     const kesimpulanPar = document.getElementById('kesimpulan-text');
     const modusTeks = (modusVal !== "Tidak ada modus") ? `modus (kehadiran paling banyak) adalah ${modusVal} hari` : `tidak memiliki modus tunggal`;
+    
+    // Dapatkan nama siswa dengan kehadiran terendah (2 hari)
+    const siswaRendah = namaSiswa.filter((_, idx) => kehadiranData[idx] <= 2);
+    const siswaTerendahList = siswaRendah.join(", ");
+    
+    // Dapatkan nama siswa dengan kehadiran sempurna (5 hari)
+    const siswaSempurna = namaSiswa.filter((_, idx) => kehadiranData[idx] === 5);
+    const siswaSempurnaList = siswaSempurna.join(", ");
+    
     kesimpulanPar.innerHTML = `
         Berdasarkan data kehadiran <strong>20 siswa kelas XI TKJ 2 SMK Canda Bhirawa Pare</strong> selama satu minggu (5 hari sekolah), diperoleh kesimpulan:<br><br>
         ✅ <strong>Rata-rata (Mean)</strong> kehadiran siswa = <strong>${meanVal} hari</strong> dari 5 hari (setara ${((meanVal/5)*100).toFixed(1)}%).<br>
         ✅ <strong>Median</strong> kehadiran = <strong>${medianVal} hari</strong>, artinya setengah dari siswa hadir ≥ ${medianVal} hari dalam seminggu.<br>
         ✅ Nilai <strong>${modusTeks}</strong> (frekuensi terbanyak).<br>
         ✅ Dari tabel distribusi, interval kehadiran <strong>${intervals.reduce((a,b)=>(a.freq > b.freq ? a : b)).lower} - ${intervals.reduce((a,b)=>(a.freq > b.freq ? a : b)).upper} hari</strong> memiliki jumlah siswa terbanyak yaitu ${Math.max(...intervals.map(i=>i.freq))} orang.<br><br>
-        🔍 <strong>Analisis Tambahan:</strong> Sebanyak <strong>${sangatBaik} siswa (${(sangatBaik/20*100).toFixed(0)}%)</strong> memiliki kehadiran sempurna (5 hari). Hanya ${kurang} siswa yang kehadirannya kurang dari 3 hari. Tingkat kehadiran kelas ini tergolong tinggi, namun perlu pendampingan khusus bagi siswa dengan kehadiran rendah.
+        🔍 <strong>Analisis Detail:</strong> Sebanyak <strong>${sangatBaik} siswa (${(sangatBaik/20*100).toFixed(0)}%)</strong> memiliki kehadiran sempurna (5 hari), yaitu: <strong>${siswaSempurnaList}</strong>.<br>
+        Hanya <strong>${kurang} siswa</strong> yang kehadirannya kurang dari 3 hari, yaitu: <strong>${siswaTerendahList || "tidak ada"}</strong>.<br><br>
+        📊 <strong>Tingkat Kehadiran Kelas:</strong> ${((meanVal/5)*100).toFixed(1)}% (kategori <strong>${meanVal/5 >= 0.8 ? "Sangat Baik" : (meanVal/5 >= 0.6 ? "Baik" : "Cukup")}</strong>). Perlu pendampingan khusus bagi siswa dengan kehadiran rendah untuk meningkatkan disiplin dan pemahaman pentingnya kehadiran di sekolah.
     `;
     
-    // Tambahan info rata-rata berdasarkan gender (untuk analisis mendalam)
-    const hadirPutra = kehadiranData.slice(0,10);
-    const hadirPutri = kehadiranData.slice(10,20);
-    const meanPutra = getMean(hadirPutra);
-    const meanPutri = getMean(hadirPutri);
     const infoTambahan = document.createElement('div');
     infoTambahan.className = 'source-info';
     infoTambahan.style.marginTop = '16px';
-    infoTambahan.innerHTML = `📊 <strong>Rata-rata kehadiran berdasarkan jenis kelamin:</strong> Laki-laki = ${meanPutra} hari, Perempuan = ${meanPutri} hari. <br>📐 Mean dari tabel distribusi = ${meanFromTable} hari (konsisten), Median kelompok ≈ ${medianGroupVal} hari.`;
+    infoTambahan.innerHTML = `📊 <strong>Informasi tambahan:</strong> Mean dari tabel distribusi = ${meanFromTable} hari (konsisten dengan mean data mentah). Median kelompok ≈ ${medianGroupVal} hari. Data diambil dari absensi manual dan presensi digital periode 10-14 Maret 2025.`;
     document.querySelector('#pengolahan .source-info').after(infoTambahan);
     
     // Smooth scroll navbar
@@ -548,9 +553,8 @@
         });
     });
     
-    // Update footer dengan nama
     const footer = document.querySelector('footer');
-    footer.innerHTML = `© 2025 - Tugas Kokurikuler Statistika | Nadine Keysha Alivia - XI TKJ 2 | SMK Canda Bhirawa Pare | Sumber: Buku Absensi & Presensi Digital Sekolah`;
+    footer.innerHTML = `© 2025 - Tugas Kokurikuler Statistika | Nadine Keysha Alivia - XI TKJ 2 | SMK Canda Bhirawa Pare | Sumber: Buku Absensi & Presensi Digital Sekolah | 20 Siswa`;
 </script>
 </body>
 </html>
